@@ -1,7 +1,7 @@
 # FIND YOUR PLACE - Simulador y Analista de Viabilidad Comercial
 
 
-Este proyecto es una aplicación multiplataforma (Web/Móvil) diseñada para empoderar a emprendedores en la toma de decisiones estratégicas. Evalúa zonas geográficas en tiempo real basándose en variables críticas como flujo peatonal, competencia y nivel socioeconómico.
+Este proyecto es una aplicación móvil diseñada para empoderar a emprendedores en la toma de decisiones estratégicas. Evalúa zonas geográficas en tiempo real basándose en variables críticas como flujo peatonal, competencia y nivel socioeconómico.
 
 ---
 

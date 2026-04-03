@@ -1,0 +1,103 @@
+<ng-container *ngIf="currentView === 'home'">
+  <ion-header class="ion-no-border">
+    <ion-toolbar color="light" style="--min-height: auto; padding-bottom: 0px;">
+      <div class="hero-section">
+        <img src="assets/map-illustration.png" alt="Map Illustration" />
+        <h1>¿Que actividad comercial<br>vas a iniciar?</h1>
+      </div>
+
+      <div class="search-inputs">
+        <div class="input-container">
+          <ion-icon name="search-outline" color="warning" class="location-icon"></ion-icon>
+          <div *ngIf="isSearchingCategory" class="spinner-container">
+            <ion-spinner name="dots" color="primary"
+              style="height: 20px; width: 20px; margin-right: 10px;"></ion-spinner>
+          </div>
+          <input type="text" placeholder="Negocio o palabra clave..." [value]="businessSearchQuery"
+            (input)="onBusinessSearchChange($event)" />
+        </div>
+
+        <div class="input-container">
+          <ion-icon name="location-outline" color="warning" (click)="getCurrentLocation()"
+            class="location-icon"></ion-icon>
+          <div *ngIf="isLocating" class="spinner-container">
+            <ion-spinner name="dots" color="primary"
+              style="height: 20px; width: 20px; margin-right: 10px;"></ion-spinner>
+          </div>
+          <input type="text" placeholder="Ubicacion/Ciudad" [value]="searchQuery" (input)="onSearchChange($event)" />
+          <ion-icon name="map-outline" [color]="radius > 0 ? 'primary' : 'medium'" class="map-icon"
+            style="font-size: 24px; margin-left: 8px;" [style.opacity]="radius > 0 ? '1' : '0.5'"
+            [style.pointer-events]="radius > 0 ? 'auto' : 'none'" (click)="pickLocationOnMap()"></ion-icon>
+        </div>
+
+        <div class="suggestions-list" *ngIf="suggestions.length > 0">
+          <div class="suggestion-item" *ngFor="let place of suggestions" (click)="selectSuggestion(place)">
+            <ion-icon name="pin" color="medium"></ion-icon>
+            <span>{{ place.place_name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="radius-container">
+        <div class="radius-header">
+          <span class="label">RADIO DE BÚSQUEDA</span>
+          <div class="value-badge">{{radius}} km</div>
+        </div>
+
+        <ion-range [min]="0.0" [max]="5.0" [step]="0.1" [snaps]="false" [pin]="true" [pinFormatter]="pinFormatter"
+          [(ngModel)]="radius" mode="ios" class="custom-radius-slider">
+        </ion-range>
+      </div>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-padding" color="light">
+    <div class="categories-grid">
+      <div class="category-item" *ngFor="let cat of filteredCategories" (click)="selectCategory(cat.name)"
+        [class.selected]="selectedCategory === cat.name">
+        <div class="icon-box">
+          <img [src]="cat.image" [alt]="cat.name" class="category-image">
+          <ion-icon name="checkmark-circle" class="check-badge" *ngIf="selectedCategory === cat.name"></ion-icon>
+        </div>
+        <span class="cat-name">{{ cat.name }}</span>
+      </div>
+    </div>
+  </ion-content>
+</ng-container>
+
+<app-negocios *ngIf="currentView === 'negocios'" class="full-screen-tab"></app-negocios>
+
+<app-analisis *ngIf="currentView === 'analisis'" class="full-screen-tab"></app-analisis>
+
+<app-financial-simulator *ngIf="currentView === 'simulator'" class="full-screen-tab"></app-financial-simulator>
+
+<ion-footer class="ion-no-border" [class.no-gradient]="currentView !== 'home'">
+  <div class="floating-action" *ngIf="currentView === 'home'">
+    <ion-button expand="block" class="primary-btn" (click)="navigateToMap()" [disabled]="!isFormValid">
+      {{ dynamicButtonText }}
+    </ion-button>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" [class.selected]="currentView === 'home'" (click)="setSelectedTab('home')">
+      <ion-icon name="home-outline"></ion-icon>
+      <span>Inicio</span>
+    </div>
+    <div class="nav-item" [class.selected]="currentView === 'negocios'" (click)="setSelectedTab('negocios')">
+      <ion-icon name="storefront-outline"></ion-icon>
+      <span>Negocios</span>
+    </div>
+    <div class="nav-item center">
+      <div class="fab-button" (click)="navigateToMap()">
+        <img src="assets/splash-logo.png" alt="Search Logo" />
+      </div>
+    </div>
+    <div class="nav-item" [class.selected]="currentView === 'analisis'" (click)="setSelectedTab('analisis')">
+      <ion-icon name="pie-chart-outline"></ion-icon>
+      <span>Analisis</span>
+    </div>
+    <div class="nav-item" [class.selected]="currentView === 'simulator'" (click)="setSelectedTab('simulator')">
+      <ion-icon name="briefcase-outline"></ion-icon>
+      <span>Simulador</span>
+    </div>
+  </div>
+</ion-footer>

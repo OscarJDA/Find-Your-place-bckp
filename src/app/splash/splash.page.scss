@@ -1,0 +1,85 @@
+ion-content {
+    --background: #0246ED;
+    /* Updated Color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.splash-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0246ED;
+    /* Updated Color */
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: row;
+    /* Side by side */
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    /* Space between logo and text */
+}
+
+.logo-container {
+    /* margin-bottom: 20px; Removed bottom margin */
+    animation: slideInLeft 1s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-50px);
+}
+
+.logo-img {
+    width: 100px;
+    /* Slightly smaller to fit side-by-side */
+    height: 100px;
+    object-fit: contain;
+}
+
+.text-container {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.app-title {
+    // font-family: 'Lebensjoy Bold', 'Lebensjoy', sans-serif;
+    font-size: 36px;
+    color: white;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.1;
+    text-align: left;
+    opacity: 0;
+    transform: translateX(30px);
+    /* Coming from right */
+    animation: fadeInText 1s ease-out 0.3s forwards;
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInText {
+    0% {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

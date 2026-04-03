@@ -1,0 +1,433 @@
+<!-- LIST VIEW -->
+<ng-container *ngIf="!selectedLocation && comparingLocations.length === 0">
+
+    <ion-content style="--background: #f4f5f8;">
+        <div class="page-header"
+            style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 0;">
+            <div style="flex: 1;">
+                <h1 style="margin-bottom: 0;">Mis Análisis</h1>
+            </div>
+            <button class="compare-header-btn" (click)="toggleCompareMode()" aria-label="Comparar Análisis">
+                <img src="assets/CompareBoton.png" alt="Comparar" class="compare-icon-img" />
+                <span class="compare-cancel-text" *ngIf="isComparingMode">Cancelar</span>
+            </button>
+        </div>
+
+        <div class="searchbar-container">
+            <ion-icon name="search-outline" color="warning" class="search-icon"></ion-icon>
+            <input type="text" placeholder="Buscar por nombre o categoría..." class="custom-search-input" />
+        </div>
+
+
+
+        <div class="cards-container" [style.margin-top.px]="isComparingMode ? 10 : 0">
+            <!-- Alert bar for comparison -->
+            <div *ngIf="isComparingMode && savedLocations.length > 0" class="compare-instructions">
+                Selecciona 2 a 3 ubicaciones
+            </div>
+
+            <div class="list-card" *ngFor="let location of savedLocations" (click)="handleCardClick(location)"
+                [class.selected-card]="isSelected(location)">
+
+                <div *ngIf="isComparingMode" class="card-checkbox">
+                    <ion-icon [name]="isSelected(location) ? 'checkmark-circle' : 'ellipse-outline'"
+                        [class.checked]="isSelected(location)"></ion-icon>
+                </div>
+
+                <div class="card-map-circle">
+                    <!-- map static image -->
+                    <img [src]="getCardMapUrl(location.recommendation.coords.lat, location.recommendation.coords.lng)"
+                        alt="Map" />
+                </div>
+                <div class="card-content">
+                    <div class="card-header-row">
+                        <div class="card-text">
+                            <h2>{{ location.recommendation.title }}</h2>
+                            <p>{{ location.type }}</p>
+                        </div>
+                        <ion-icon name="chevron-forward-outline" class="chevron-icon"></ion-icon>
+                    </div>
+                    <div class="card-badges">
+                        <div class="status-badge" [ngClass]="getBadgeClass(location.recommendation.score)">
+                            {{ getBadgeText(location.recommendation.score) }}
+                        </div>
+                        <span class="date-text">{{ location.date }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="isComparingMode" class="compare-action-bar">
+            <div class="compare-info">{{ selectedForCompare.length }} seleccionados</div>
+            <ion-button [disabled]="selectedForCompare.length < 2" shape="round" color="primary"
+                (click)="startComparison()">
+                Comparar
+            </ion-button>
+        </div>
+
+        <!-- Espaciador adicional para barra de pestañas -->
+        <div style="height: 160px;"></div>
+    </ion-content>
+</ng-container>
+
+
+<!-- DETAIL / PDF VIEW -->
+<ng-container *ngIf="selectedLocation">
+    <ion-header class="ion-no-border">
+        <ion-toolbar style="--background: #FFFFFF;">
+            <ion-buttons slot="start">
+                <ion-button (click)="clearSelection()" style="color: #111b3d;">
+                    <ion-icon slot="icon-only" name="chevron-back" style="font-size: 24px;"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title
+                style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-weight: 600; font-size: 18px; color: #111418; text-align: center; padding-right: 48px; letter-spacing: -0.5px;">Análisis
+                Completo</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content style="--background: #FFFFFF;">
+        <div id="pdf-content" class="modern-analysis-wrapper" style="background: #FFFFFF; padding-top: 16px;">
+
+            <!-- Hero Viability Ring -->
+            <div class="viability-hero">
+                <div class="circular-progress-container">
+                    <svg class="circular-progress" viewBox="0 0 100 100">
+                        <circle class="bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="progress" cx="50" cy="50" r="45" [style.stroke-dasharray]="'283'"
+                            [style.stroke-dashoffset]="283 - (283 * (selectedLocation.recommendation.score / 5))">
+                        </circle>
+                    </svg>
+                    <div class="progress-content">
+                        <h2
+                            style="font-size: 50px; font-weight: 800; color: #192033; margin: 0; letter-spacing: -1.5px;">
+                            {{
+                            (selectedLocation.recommendation.score / 5 * 100) | number:'1.0-0' }}%</h2>
+                        <span class="status-label"
+                            style="color: #2F80ED; font-size: 14px; font-weight: 600; margin-top: 2px;">{{
+                            (selectedLocation.recommendation.score / 5 * 100) >= 80 ?
+                            'Excelente' : ((selectedLocation.recommendation.score / 5 * 100) >= 50 ? 'Regular' : 'Bajo')
+                            }}</span>
+                    </div>
+                </div>
+                <h2 class="viability-title"
+                    style="font-size: 20px; font-weight: 800; color: #192033; margin-bottom: 8px;">Índice de Viabilidad
+                </h2>
+                <p class="viability-subtitle"
+                    style="font-size: 13px; color: #768194; max-width: 250px; margin: 0 auto; line-height: 1.5; font-weight: 500;">
+                    Zona de
+                    alto potencial para retail de lujo basada en demografía local.</p>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="m-header">
+                        <ion-icon name="walk-outline" class="icon-blue"></ion-icon>
+                        <span>FLUJO PEATONAL</span>
+                    </div>
+                    <h3>{{ selectedLocation.recommendation.footTraffic }}</h3>
+                    <p>Basado en actividad local</p>
+                </div>
+                <div class="metric-card">
+                    <div class="m-header">
+                        <ion-icon name="pie-chart-outline" class="icon-blue"></ion-icon>
+                        <span>COMPETENCIA</span>
+                    </div>
+                    <h3>{{ selectedLocation.recommendation.saturationLevel }}</h3>
+                    <p>{{ selectedLocation.recommendation.competitorsCount }} competidores cerca</p>
+                </div>
+            </div>
+
+            <!-- Sections -->
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>Análisis de Competencia</h2>
+                    <span class="see-map">Ver Mapa</span>
+                </div>
+                <div class="map-view-box">
+                    <img [src]="getStaticMapUrl()" alt="Mapa de Ubicación" crossorigin="anonymous">
+                </div>
+            </div>
+
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>Información del Área</h2>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon bg-light-blue">
+                        <ion-icon name="cash" class="text-blue"></ion-icon>
+                    </div>
+                    <div class="info-text">
+                        <h4>Nivel Socioeconómico</h4>
+                        <p>Métricas de infraestructura indican un nivel <strong>{{
+                                selectedLocation.recommendation.socioeconomicLevel || 'Medio' }}</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon bg-light-green">
+                        <ion-icon name="bus-outline" class="text-green"></ion-icon>
+                    </div>
+                    <div class="info-text">
+                        <h4>Accesibilidad</h4>
+                        <p>Conectividad de transporte peatonal y vehicular <strong>{{
+                                selectedLocation.recommendation.accessibility?.walkability || 'Media' }}</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon bg-light-yellow">
+                        <ion-icon name="shield-checkmark-outline" class="text-yellow"></ion-icon>
+                    </div>
+                    <div class="info-text">
+                        <h4>Seguridad Promedio</h4>
+                        <p>Basado en actividad urbana, la percepción es de seguridad <strong>{{
+                                selectedLocation.recommendation.securityLevel || 'Media' }}</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formula Section -->
+            <div class="section-container" *ngIf="selectedLocation.recommendation.formulaDetails">
+                <div class="section-header">
+                    <h2>Fórmula de Evaluación</h2>
+                </div>
+                <div class="formula-card">
+                    <p class="formula-desc">
+                        El puntaje de viabilidad final está basado en la categoría <strong>{{ selectedLocation.type ||
+                            selectedLocation.category }}</strong> con los siguientes pesos e indicadores parciales:
+                    </p>
+                    <div class="formula-grid">
+                        <div class="f-row">
+                            <span class="f-lbl">Tráfico ({{
+                                selectedLocation.recommendation.formulaDetails.weights.traffic * 100 | number:'1.0-0'
+                                }}%)</span>
+                            <div class="f-bar-container">
+                                <div class="f-bar bg-blue"
+                                    [style.width.%]="selectedLocation.recommendation.formulaDetails.rawScores.traffic">
+                                </div>
+                            </div>
+                            <span class="f-val">{{ selectedLocation.recommendation.formulaDetails.rawScores.traffic |
+                                number:'1.0-0' }}</span>
+                        </div>
+                        <div class="f-row">
+                            <span class="f-lbl">Competencia ({{
+                                selectedLocation.recommendation.formulaDetails.weights.competition * 100 |
+                                number:'1.0-0' }}%)</span>
+                            <div class="f-bar-container">
+                                <div class="f-bar bg-orange"
+                                    [style.width.%]="selectedLocation.recommendation.formulaDetails.rawScores.competition">
+                                </div>
+                            </div>
+                            <span class="f-val">{{ selectedLocation.recommendation.formulaDetails.rawScores.competition
+                                | number:'1.0-0' }}</span>
+                        </div>
+                        <div class="f-row">
+                            <span class="f-lbl">Accesibilidad ({{
+                                selectedLocation.recommendation.formulaDetails.weights.accessibility * 100 |
+                                number:'1.0-0' }}%)</span>
+                            <div class="f-bar-container">
+                                <div class="f-bar bg-green"
+                                    [style.width.%]="selectedLocation.recommendation.formulaDetails.rawScores.accessibility">
+                                </div>
+                            </div>
+                            <span class="f-val">{{
+                                selectedLocation.recommendation.formulaDetails.rawScores.accessibility | number:'1.0-0'
+                                }}</span>
+                        </div>
+                        <div class="f-row">
+                            <span class="f-lbl">Nivel Socioec. ({{
+                                selectedLocation.recommendation.formulaDetails.weights.socioeconomic * 100 |
+                                number:'1.0-0' }}%)</span>
+                            <div class="f-bar-container">
+                                <div class="f-bar bg-purple"
+                                    [style.width.%]="selectedLocation.recommendation.formulaDetails.rawScores.socioeconomic">
+                                </div>
+                            </div>
+                            <span class="f-val">{{
+                                selectedLocation.recommendation.formulaDetails.rawScores.socioeconomic | number:'1.0-0'
+                                }}</span>
+                        </div>
+                        <div class="f-row">
+                            <span class="f-lbl">Seguridad ({{
+                                selectedLocation.recommendation.formulaDetails.weights.security * 100 | number:'1.0-0'
+                                }}%)</span>
+                            <div class="f-bar-container">
+                                <div class="f-bar bg-yellow"
+                                    [style.width.%]="selectedLocation.recommendation.formulaDetails.rawScores.security">
+                                </div>
+                            </div>
+                            <span class="f-val">{{ selectedLocation.recommendation.formulaDetails.rawScores.security |
+                                number:'1.0-0' }}</span>
+                        </div>
+                    </div>
+                    <div class="formula-footer">
+                        Subtotal: {{ selectedLocation.recommendation.formulaDetails.totalScoreRaw | number:'1.0-1' }}
+                        pts &nbsp;|&nbsp; Final: {{ selectedLocation.recommendation.score | number:'1.1-1' }} ⭐
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategy Summary Area -->
+            <div class="strategy-summary">
+                <h2 class="main-strategy-title">Resumen de Estrategia</h2>
+                <p class="strategy-date">Actualizado {{ selectedLocation.date }}</p>
+
+                <div class="list-section"
+                    *ngIf="selectedLocation.recommendation.pros && selectedLocation.recommendation.pros.length > 0">
+                    <div class="list-header">
+                        <span class="list-title">FORTALEZAS</span>
+                        <span class="badge-pill bg-light-green text-green">Alto Impacto</span>
+                    </div>
+                    <div class="insight-card" *ngFor="let pro of selectedLocation.recommendation.pros">
+                        <ion-icon name="checkmark-circle-outline" class="insight-icon success"></ion-icon>
+                        <div class="insight-content">
+                            <h4>{{ pro }}</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list-section"
+                    *ngIf="selectedLocation.recommendation.cons && selectedLocation.recommendation.cons.length > 0">
+                    <div class="list-header">
+                        <span class="list-title">CONSIDERACIONES</span>
+                        <span class="badge-pill bg-light-yellow text-yellow">Requiere Atención</span>
+                    </div>
+                    <div class="insight-card" *ngFor="let con of selectedLocation.recommendation.cons">
+                        <ion-icon name="warning-outline" class="insight-icon warning"></ion-icon>
+                        <div class="insight-content">
+                            <h4>{{ con }}</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perspective Box -->
+                <div class="perspective-box">
+                    <div class="perspective-header">
+                        <ion-icon name="stats-chart-outline"></ion-icon>
+                        <h4>Perspectiva Estratégica</h4>
+                    </div>
+                    <p>La posición estratégica general se mantiene sólida. El enfoque debe seguir siendo aprovechar la
+                        infraestructura para mitigar las fluctuaciones del mercado mientras se optimiza la reserva de
+                        talento.</p>
+                </div>
+            </div>
+
+        </div> <!-- End pdf-content modern-analysis-wrapper -->
+
+        <!-- Ocultamos el div espaciador porque ion-footer ahora hará el ajuste de espaciado automáticamente gracias al framework -->
+
+        <div class="footer-container">
+            <ion-button expand="block" shape="round" class="download-btn" (click)="exportToPDF()">
+                <ion-icon slot="start" name="document-text-outline"></ion-icon>
+                Descargar Reporte PDF
+            </ion-button>
+        </div>
+
+        <!-- Espaciador adicional para asegurar el desplazamiento (scroll) completo -->
+        <div style="height: 90px;"></div>
+    </ion-content>
+</ng-container>
+
+<!-- COMPARE / PDF VIEW -->
+<ng-container *ngIf="comparingLocations.length > 0">
+    <ion-header class="ion-no-border" style="background: #FAFBFC;">
+        <ion-toolbar style="--background: #FAFBFC; --border-width: 0;">
+            <ion-buttons slot="start">
+                <ion-button (click)="clearComparison()" class="header-round-btn">
+                    <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title
+                style="font-weight: 700; font-size: 18px; color: #111b3d; text-align: center;">Comparativa</ion-title>
+
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content style="--background: #FAFBFC;">
+        <div id="pdf-compare-content" class="modern-analysis-wrapper pdf-compare-content"
+            style="padding-top: 10px; padding-bottom: 0px !important; min-height: auto !important; margin-bottom: 15px;">
+
+            <div class="compare-grid view-slide">
+                <!-- Iteramos sobre las ubicaciones comparadas -->
+                <div class="compare-card" *ngFor="let loc of comparingLocations; let i = index">
+
+                    <div class="circular-progress-container-sm">
+                        <svg class="circular-progress-sm" viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="progress" cx="50" cy="50" r="45"
+                                [style.stroke]="getScoreColor(loc.recommendation.score)"
+                                [style.stroke-dasharray]="'283'"
+                                [style.stroke-dashoffset]="283 - (283 * (loc.recommendation.score / 5))">
+                            </circle>
+                        </svg>
+                        <div class="progress-content-sm">
+                            <span [style.color]="getScoreColorText(loc.recommendation.score)"
+                                style="font-weight: 800; font-size: 18px;">
+                                {{ (loc.recommendation.score / 5 * 100) | number:'1.0-0' }}%
+                            </span>
+                        </div>
+                    </div>
+
+                    <h3 class="loc-card-title">{{ loc.recommendation.title || 'Local ' + (i === 0 ? 'A' : (i === 1 ? 'B'
+                        : 'C')) }}</h3>
+                    <span class="loc-card-subtitle">{{ loc.type || 'ZONA COMERCIAL' }}</span>
+
+                    <div class="metric-row">
+                        <div class="metric-icon-bg bg-blue-light">
+                            <ion-icon name="people" style="color: #60a5fa;"></ion-icon>
+                        </div>
+                        <div class="metric-texts">
+                            <span class="metric-lbl">TRÁFICO</span>
+                            <span class="metric-val">{{ loc.recommendation.footTraffic }}</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-row">
+                        <div class="metric-icon-bg bg-orange-light">
+                            <ion-icon name="speedometer" style="color: #fb923c;"></ion-icon>
+                        </div>
+                        <div class="metric-texts">
+                            <span class="metric-lbl">SATURACIÓN</span>
+                            <span class="metric-val">{{ loc.recommendation.saturationLevel }}</span>
+                        </div>
+                    </div>
+
+                    <div class="fortalezas-section">
+                        <span class="fortalezas-title">FORTALEZAS</span>
+                        <ul class="fortalezas-list">
+                            <li *ngFor="let pro of loc.recommendation.pros | slice:0:3">{{ pro }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verdict-box">
+                <div class="verdict-header">
+                    <div class="verdict-title">
+                        <ion-icon name="bar-chart"></ion-icon>
+                        <h4>Veredicto Final</h4>
+                    </div>
+                    <span class="verdict-badge">RECOMENDADO</span>
+                </div>
+                <p>Basado en el análisis de flujo peatonal y baja competencia directa, el <strong>{{
+                        getRecommended()?.recommendation.title || 'Local Recomendado' }}</strong> presenta una
+                    viabilidad superior frente a las otras opciones.</p>
+                <div class="verdict-footer">
+                    <ion-icon name="trending-up"></ion-icon> Crecimiento proyectado +12%
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-container" style="padding-top: 0px; margin-top: 0px;">
+            <ion-button expand="block" shape="round" class="download-btn" (click)="exportMultiPDF()">
+                <ion-icon slot="start" name="document-text-outline"></ion-icon>
+                Descargar Comparativa PDF
+            </ion-button>
+        </div>
+
+        <div style="height: 90px;"></div>
+    </ion-content>
+</ng-container>

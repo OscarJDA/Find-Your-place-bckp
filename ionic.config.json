@@ -1,0 +1,7 @@
+{
+  "name": "Find Your Place",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

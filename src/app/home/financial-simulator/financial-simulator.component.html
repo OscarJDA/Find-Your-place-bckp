@@ -1,0 +1,86 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar color="light" style="--min-height: auto; padding-bottom: 0px;">
+        <div class="hero-section">
+            <img src="assets/Financiero.png" alt="Financial Simulation" />
+            <h1>¿Quieres calcular la<br>inversión de tu negocio?</h1>
+        </div>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" color="light">
+    <div class="simulator-card">
+
+        <div class="input-group">
+            <div class="input-item">
+                <ion-label position="stacked">Renta Mensual Estimada</ion-label>
+                <div class="input-wrapper">
+                    <ion-input type="number" placeholder="0.00" [(ngModel)]="rent"></ion-input>
+                    <span class="currency-badge">MXN</span>
+                </div>
+            </div>
+
+            <div class="input-item">
+                <ion-label position="stacked">Inversión Inicial</ion-label>
+                <div class="input-wrapper">
+                    <ion-input type="number" placeholder="0.00" [(ngModel)]="investment"></ion-input>
+                    <span class="currency-badge">MXN</span>
+                </div>
+            </div>
+
+            <div class="input-item">
+                <ion-label position="stacked">Margen Promedio (%)</ion-label>
+                <div class="input-wrapper">
+                    <ion-input type="number" placeholder="0" [(ngModel)]="margin"></ion-input>
+                    <span class="currency-badge">%</span>
+                </div>
+            </div>
+
+            <div class="input-item">
+                <ion-label position="stacked">Ticket Promedio</ion-label>
+                <div class="input-wrapper">
+                    <ion-input type="number" placeholder="0.00" [(ngModel)]="ticket"></ion-input>
+                    <span class="currency-badge">MXN</span>
+                </div>
+            </div>
+
+            <div class="input-item">
+                <ion-label position="stacked">Ventas Mensuales Estimadas</ion-label>
+                <div class="input-wrapper">
+                    <ion-input type="number" placeholder="0.00" [(ngModel)]="sales"></ion-input>
+                    <span class="currency-badge">MXN</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section" *ngIf="roi !== null">
+            <div class="result-item highlight">
+                <span class="label">ROI Estimado (Anual)</span>
+                <span class="value" [class.positive]="roi > 0" [class.negative]="roi <= 0">{{ roi | number:'1.1-1'
+                    }}%</span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="result-row">
+                <div class="result-item small">
+                    <span class="label">Punto de Equilibrio</span>
+                    <span class="value">{{ formatCurrency(breakEven) }}</span>
+                    <span class="sub-label">Ventas requeridas</span>
+                </div>
+
+                <div class="result-item small">
+                    <span class="label">Tiempo Recuperación</span>
+                    <span class="value">{{ (recoveryTime && recoveryTime > 0) ? (recoveryTime | number:'1.1-1') + '
+                        meses' : 'N/A' }}</span>
+                    <span class="sub-label">Estimado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="static-action-container">
+        <ion-button expand="block" class="calculate-btn" (click)="calculate()" [disabled]="!isFormValid()">
+            Calcular ROI
+        </ion-button>
+    </div>
+</ion-content>

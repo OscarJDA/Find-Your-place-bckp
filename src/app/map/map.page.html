@@ -1,0 +1,320 @@
+<ion-content [fullscreen]="true" [scrollY]="false">
+    <div class="map-container">
+        <div id="map" style="width: 100%; height: 100%;"></div>
+
+        <!-- Center Marker for Picker Mode -->
+        <div class="center-marker" *ngIf="isPickerMode">
+            <ion-icon name="location" color="danger"></ion-icon>
+            <div class="marker-shadow"></div>
+        </div>
+    </div>
+
+    <div class="header-buttons">
+        <div class="back-button-container">
+            <ion-button fill="clear" color="dark" (click)="goBack()">
+                <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+        </div>
+    </div>
+
+    <!-- Confirm Button (Bottom) -->
+    <div style="position: absolute; bottom: 30px; left: 20px; right: 20px; pointer-events: auto;">
+        <ion-button expand="block" shape="round" color="primary" (click)="confirmSelection()">
+            Confirmar Ubicación
+        </ion-button>
+    </div>
+
+    <!-- Search Controls Overlay (Bottom Sheet Style) -->
+    <div class="bottom-sheet" *ngIf="!isPickerMode" [class.minimized]="!isSheetExpanded">
+        <!-- Floating Map Controls pinned to the top of the sheet -->
+        <div class="floating-map-controls">
+            <div class="control-btn location-btn" (click)="locateUser()">
+                <ion-icon name="locate" color="primary"></ion-icon>
+            </div>
+            <div class="control-btn competitors-btn" (click)="toggleCompetitors()" *ngIf="recommendations.length > 0">
+                <ion-icon name="storefront" [color]="showCompetitors ? 'danger' : 'medium'"></ion-icon>
+            </div>
+            <div class="zoom-group">
+                <div class="zoom-btn" (click)="zoomIn()">
+                    <ion-icon name="add"></ion-icon>
+                </div>
+                <div class="zoom-divider"></div>
+                <div class="zoom-btn" (click)="zoomOut()">
+                    <ion-icon name="remove"></ion-icon>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drag Handle -->
+        <div class="sheet-handle" (click)="toggleSheet()" (touchstart)="onTouchStart($event)"
+            (touchend)="onTouchEnd($event)"></div>
+
+        <div class="sheet-header" (click)="toggleSheet()" (touchstart)="onTouchStart($event)"
+            (touchend)="onTouchEnd($event)">
+            <div class="header-content" *ngIf="!isAnalyzing">
+                <div class="results-header-text">
+                    <h2 class="results-main-title">Resultados de Búsqueda</h2>
+                    <p class="results-subtitle">{{recommendations.length > 0 ? recommendations.length : '0'}}
+                        ubicaciones cercanas encontradas</p>
+                </div>
+            </div>
+
+            <div *ngIf="isAnalyzing" class="analyzing-state">
+                <div class="analyzing-header">
+                    <div class="analyzing-title-container">
+                        <ion-card-title class="analyzing-title">{{selectedCategory || 'Análisis'}}</ion-card-title>
+                        <p class="analyzing-subtitle">Análisis de mercado en curso</p>
+                    </div>
+                    <div class="analyzing-icon">
+                        <ion-icon name="restaurant"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="analyzing-progress-container">
+                    <div class="progress-labels">
+                        <span class="progress-text">Estado del procesamiento</span>
+                        <span class="progress-percent">{{ (progress * 100) | number:'1.0-0' }}%</span>
+                    </div>
+                    <div class="custom-progress-container analyzing-progress-bar">
+                        <div class="progress-fill" [style.width.%]="progress * 100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sheet-content">
+            <div *ngIf="!isAnalyzing && recommendations.length === 0" class="ion-text-center ion-padding">
+                <p>No se encontraron resultados.</p>
+            </div>
+
+            <!-- Results List -->
+            <div *ngIf="recommendations.length > 0" class="results-container">
+                <div class="modern-result-card" *ngFor="let rec of recommendations" (click)="openDetails(rec)">
+                    <div class="card-icon-container">
+                        <ion-icon name="location"></ion-icon>
+                    </div>
+
+                    <div class="card-details">
+                        <div class="card-title-row">
+                            <h3 class="place-name">{{rec.title}}</h3>
+                            <div class="rating-badge-modern"
+                                [style.background]="rec.score >= 4.0 ? '#e6f4ea' : (rec.score >= 3.0 ? '#fef7e0' : '#fce8e6')"
+                                [style.color]="rec.score >= 4.0 ? '#1e8e3e' : (rec.score >= 3.0 ? '#f29900' : '#d93025')">
+                                <span>{{rec.score | number:'1.1-1'}}</span>
+                                <ion-icon name="star-outline"></ion-icon>
+                            </div>
+                        </div>
+
+                        <p class="place-address-text">{{rec.address || 'Ubicación cercana encontrada'}}</p>
+
+                        <div class="category-pill-modern">
+                            {{(selectedCategory || 'LUGAR') | uppercase}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()" [canDismiss]="true" [breakpoints]="[0, 1]"
+        [initialBreakpoint]="1">
+        <ng-template>
+            <div class="ion-page">
+                <ion-header class="ion-no-border">
+                    <ion-toolbar style="--background: #FFFFFF; --min-height: 54px; padding: 18px 14px 8px;">
+                        <ion-buttons slot="start">
+                            <ion-button
+                                style="color: #007aff; text-transform: none; font-size: 1.05rem; letter-spacing: 0; font-weight: 500;"
+                                (click)="closeModal()">
+                                <ion-icon name="chevron-back-outline" slot="start"
+                                    style="font-size: 1.4rem; margin-right: 4px;"></ion-icon>Atrás
+                            </ion-button>
+                        </ion-buttons>
+                        <ion-buttons slot="end">
+                            <ion-button
+                                style="color: #007aff; text-transform: none; letter-spacing: 0; font-weight: 500; height: auto; --padding-end: 0;"
+                                (click)="saveToMyBusinesses()">
+                                <div
+                                    style="text-align: right; line-height: 1.2; font-size: 0.95rem; pointer-events: none;">
+                                    Agregar a<br>mis negocios</div>
+                                <ion-icon name="add-circle-outline" slot="end"
+                                    style="font-size: 1.4rem; margin-left: 4px; pointer-events: none;"></ion-icon>
+                            </ion-button>
+                        </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+
+                <ion-content style="--background: #FFFFFF;">
+                    <div class="ion-padding details-wrapper" *ngIf="selectedRecommendation">
+                        <div class="header-section">
+                            <h1 class="main-title">{{ selectedRecommendation.title }}</h1>
+                            <p class="subtitle">
+                                <ion-icon name="location" class="location-icon"></ion-icon>
+                                {{ selectedRecommendation.address || 'Ubicación seleccionada' }}
+                            </p>
+                            <div class="street-view-container"
+                                style="margin-top: 15px; border-radius: 12px; overflow: hidden; height: 180px; background: #e0e0e0; box-shadow: 0 4px 10px rgba(0,0,0,0.08); position: relative;">
+                                <div *ngIf="hasGoogleKey && !selectedRecommendation.streetViewImage"
+                                    id="street-view-panorama"
+                                    style="position: absolute; top: 0; left: 0; z-index: 0; width: 100%; height: calc(100% + 45px);">
+                                </div>
+                                <!-- Capa transparente para bloquear interacciones -->
+                                <div *ngIf="hasGoogleKey && !selectedRecommendation.streetViewImage"
+                                    style="position: absolute; top: 0; left: 0; z-index: 10; width: 100%; height: 100%; background: transparent;">
+                                </div>
+                                <!-- Imagen estática obtenida por el script (no usa static api) -->
+                                <img *ngIf="hasGoogleKey && selectedRecommendation.streetViewImage"
+                                    [src]="selectedRecommendation.streetViewImage"
+                                    style="position: absolute; top: 0; left: 0; z-index: 0; width: 100%; height: calc(100% + 45px); object-fit: cover;"
+                                    alt="Vista estática de street view">
+                                <img *ngIf="!hasGoogleKey" [src]="getStaticMapUrl()" alt="Vista Previa"
+                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+
+                        <div class="analysis-card">
+                            <div class="card-title">RESULTADO DE ANÁLISIS</div>
+
+                            <div class="viability-header">
+                                <div class="donut-chart"
+                                    [style.background]="'conic-gradient(#1877F2 ' + (selectedRecommendation.score / 5 * 100) + '%, #F0F2F5 0)'">
+                                    <div class="donut-inner">
+                                        <span class="donut-percent">{{ (selectedRecommendation.score / 5 * 100) |
+                                            number:'1.0-0' }}%</span>
+                                        <span class="donut-label">VIABLE</span>
+                                    </div>
+                                </div>
+                                <div class="viability-text">
+                                    <h3>Índice de viabilidad excelente</h3>
+                                    <p>Este local presenta las condiciones óptimas para el éxito comercial.</p>
+                                </div>
+                            </div>
+
+                            <div class="metric-row">
+                                <div class="metric-left">
+                                    <div class="icon-box green"><ion-icon name="people"></ion-icon></div>
+                                    <span>Flujo Peatonal</span>
+                                </div>
+                                <div class="metric-badge badge-green">{{ selectedRecommendation.footTraffic | uppercase
+                                    }}</div>
+                            </div>
+
+                            <div class="metric-row">
+                                <div class="metric-left">
+                                    <div class="icon-box blue"><ion-icon name="storefront"></ion-icon></div>
+                                    <span>Competencia</span>
+                                </div>
+                                <div class="metric-badge badge-blue">
+                                    {{ selectedRecommendation.competitorsCount <= 2 ? 'BAJA' :
+                                        (selectedRecommendation.competitorsCount <=4 ? 'MEDIA' : 'ALTA' ) }} </div>
+                                </div>
+
+                                <div class="metric-row">
+                                    <div class="metric-left">
+                                        <div class="icon-box yellow"><ion-icon name="cash-outline"></ion-icon></div>
+                                        <span>Socioeconómico</span>
+                                    </div>
+                                    <div class="metric-badge badge-yellow">
+                                        {{ selectedRecommendation.zoneType === 'Residencial' ? 'MEDIO' : 'ALTO' }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ═══ RANDOM FOREST MODEL SECTION ═══ -->
+                            <div class="section-title ai-title">
+                                <ion-icon name="sparkles" class="ai-sparkles"></ion-icon>
+                                <h2>Random Forest — Modelo Predictivo</h2>
+                            </div>
+
+                            <!-- RF Confidence Gauge -->
+                            <div class="rf-confidence-container" *ngIf="selectedRecommendation.rfPrediction">
+                                <div class="rf-confidence-gauge">
+                                    <div class="gauge-ring"
+                                        [style.background]="'conic-gradient(#6366f1 ' + (selectedRecommendation.rfPrediction.confidence * 100) + '%, #e5e7eb 0)'">
+                                        <div class="gauge-inner">
+                                            <span class="gauge-value">{{ (selectedRecommendation.rfPrediction.confidence
+                                                * 100) | number:'1.0-0' }}%</span>
+                                            <span class="gauge-label">Confianza</span>
+                                        </div>
+                                    </div>
+                                    <div class="rf-model-stats">
+                                        <div class="stat-item">
+                                            <ion-icon name="git-branch-outline"></ion-icon>
+                                            <span>{{ selectedRecommendation.rfPrediction.modelInfo.numTrees }}
+                                                árboles</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <ion-icon name="analytics-outline"></ion-icon>
+                                            <span>MSE: {{ selectedRecommendation.rfPrediction.modelInfo.mse }}</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <ion-icon name="checkmark-done-outline"></ion-icon>
+                                            <span>OOB R²: {{ selectedRecommendation.rfPrediction.modelInfo.oobScore
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Feature Importance Bars -->
+                            <div class="rf-features-container" *ngIf="selectedRecommendation.rfPrediction">
+                                <div class="rf-features-title">Importancia de Variables (x₁..x₇)</div>
+                                <div class="rf-feature-bar" *ngFor="let feat of getFeatureImportanceArray()">
+                                    <div class="feature-label">{{ feat.label }}</div>
+                                    <div class="feature-bar-track">
+                                        <div class="feature-bar-fill" [style.width.%]="feat.value * 100"
+                                            [style.background]="feat.color">
+                                        </div>
+                                    </div>
+                                    <div class="feature-value">{{ (feat.value * 100) | number:'1.1-1' }}%</div>
+                                </div>
+                            </div>
+
+                            <!-- Formula Display -->
+                            <div class="rf-formula-display" *ngIf="selectedRecommendation.rfPrediction">
+                                <div class="formula-text">f̂(x) = (1/T) Σ h<sub>t</sub>(x)</div>
+                                <div class="formula-description">Promedio de {{
+                                    selectedRecommendation.rfPrediction.modelInfo.numTrees }} árboles de decisión
+                                    entrenados con {{ selectedRecommendation.rfPrediction.modelInfo.trainingSamples }}
+                                    muestras</div>
+                            </div>
+
+                            <!-- Pros / Cons -->
+                            <ul class="ai-bullets">
+                                <li *ngFor="let pro of selectedRecommendation.pros">
+                                    <ion-icon name="checkmark-circle" style="color: #22c55e;"></ion-icon>
+                                    <span>{{ pro }}</span>
+                                </li>
+                                <li *ngFor="let con of selectedRecommendation.cons">
+                                    <ion-icon name="alert-circle" style="color: #f59e0b;"></ion-icon>
+                                    <span>{{ con }}</span>
+                                </li>
+                            </ul>
+
+                            <div class="section-title text-gray">SERVICIOS Y ACCESIBILIDAD</div>
+                            <div class="services-pills">
+                                <div class="service-pill blue-pill"
+                                    *ngIf="selectedRecommendation.accessibility.mainRoads">
+                                    <ion-icon name="car"></ion-icon> Main Roads
+                                </div>
+                                <div class="service-pill blue-pill"
+                                    *ngIf="selectedRecommendation.accessibility.publicTransport">
+                                    <ion-icon name="bus"></ion-icon> Public Transp.
+                                </div>
+                                <div class="service-pill green-pill">
+                                    <ion-icon name="walk"></ion-icon> Walkability: {{
+                                    selectedRecommendation.accessibility.walkability }}
+                                </div>
+                            </div>
+
+                            <div class="section-title text-gray">UBICACIÓN</div>
+                            <div class="location-map">
+                                <img [src]="getStaticMapUrl()" alt="Mapa">
+                            </div>
+                        </div>
+                </ion-content>
+            </div>
+        </ng-template>
+    </ion-modal>
+</ion-content>

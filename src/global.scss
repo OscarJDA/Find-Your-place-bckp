@@ -1,0 +1,189 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+/* Custom Alert Styling */
+/* Custom Alert Styling - iOS 17+ Style */
+.custom-location-alert {
+    /* iOS Alert Width is typically 270px */
+    --width: 270px;
+    --max-width: 80%;
+    --backdrop-opacity: 0.3;
+    --background: transparent;
+    /* Wrapper handles background */
+
+    .alert-wrapper {
+        border-radius: 20px;
+        /* Highly rounded corners */
+        background-color: rgba(255, 255, 255, 0.82);
+        /* Frosted glass base */
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        box-shadow: 0 0 0 0 transparent;
+        /* Clean look */
+        overflow: hidden;
+    }
+
+    .alert-head {
+        padding: 20px 16px 8px 16px;
+        background: transparent;
+        text-align: center;
+
+        .alert-title {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: #000000;
+            margin: 0;
+            letter-spacing: -0.4px;
+        }
+    }
+
+    .alert-message {
+        padding: 0 16px 20px 16px;
+        color: #3c3c43;
+        /* Dark gray */
+        font-size: 13px;
+        line-height: 1.35;
+        text-align: center;
+        background: transparent;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    }
+
+    /* Button Group Container */
+    .alert-button-group {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        /* Side by side */
+        width: 100%;
+        /* Thin separator line on top */
+        border-top: 0.5px solid rgba(60, 60, 67, 0.29);
+        background: transparent;
+        gap: 0;
+
+        button {
+            flex: 1;
+            margin: 0 !important;
+            padding: 0;
+            height: 44px;
+            background: transparent !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            font-size: 17px;
+            position: relative;
+
+            .alert-button-inner {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-transform: none;
+                /* No uppercase */
+                letter-spacing: -0.4px;
+            }
+        }
+
+        /* Vertical Divider between buttons */
+        button:not(:last-child) {
+            border-right: 0.5px solid rgba(60, 60, 67, 0.29);
+        }
+
+        /* Cancel Button (No) */
+        .alert-button-cancel {
+            color: #007AFF !important;
+            /* iOS Blue */
+            font-weight: 400;
+
+            .alert-button-inner {
+                color: #007AFF !important;
+            }
+        }
+
+        /* Confirm Button (Sí) */
+        .alert-button-confirm {
+            color: #007AFF !important;
+            /* iOS Blue */
+            font-weight: 600;
+            /* Bold to standout */
+
+            .alert-button-inner {
+                color: #007AFF !important;
+            }
+        }
+    }
+}
+
+/* Minimalist iOS Toast Styling */
+.ios-minimal-toast {
+    --background: #ffffff;
+    /* Solid white base to avoid screen blurring */
+    --color: #000000;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --border-radius: 100px;
+    /* Fully rounded pill */
+    --padding-start: 16px;
+    --padding-end: 16px;
+
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+
+    &::part(message) {
+        font-weight: 500;
+    }
+
+    &::part(icon) {
+        font-size: 20px;
+        color: #34c759;
+        /* iOS Green for success by default, dynamic if set */
+        margin-right: 8px;
+        /* space between icon and text */
+    }
+
+    &.error {
+        &::part(icon) {
+            color: #ff3b30;
+            /* iOS Red */
+        }
+    }
+}

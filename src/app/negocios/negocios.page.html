@@ -1,0 +1,193 @@
+<!-- LIST VIEW -->
+<ng-container *ngIf="!selectedLocation">
+
+
+    <ion-content style="--background: #f4f5f8;">
+        <div class="page-header">
+            <h1>Mis Negocios</h1>
+        </div>
+
+        <div class="searchbar-container">
+            <ion-icon name="search-outline" color="warning" class="search-icon"></ion-icon>
+            <input type="text" placeholder="Buscar negocios..." class="custom-search-input" />
+        </div>
+
+        <div class="cards-container">
+            <div class="custom-card" *ngFor="let location of savedLocations" (click)="selectLocation(location)">
+                <div class="map-section" style="overflow: hidden; position: relative;">
+                    <!-- Mapa interactivo en background mientras tomamos la foto -->
+                    <div *ngIf="!location.streetViewImage" [id]="'street-view-' + location.recommendation.id"
+                        style="position: absolute; top: 0; left: 0; z-index: 0; width: 100%; height: calc(100% + 45px);">
+                    </div>
+                    <!-- Capa transparente para bloquear interacciones (hace que actue estático antes de la captura) -->
+                    <div *ngIf="!location.streetViewImage"
+                        style="position: absolute; top: 0; left: 0; z-index: 10; width: 100%; height: 100%; background: transparent;">
+                    </div>
+
+                    <!-- Imagen estática obtenida por el script (no usa static api) -->
+                    <img *ngIf="location.streetViewImage" [src]="location.streetViewImage"
+                        style="position: absolute; top: 0; left: 0; z-index: 0; width: 100%; height: calc(100% + 45px); object-fit: cover;"
+                        alt="Vista estática de street view">
+                    <div class="viable-badge">
+                        {{ (location.recommendation.score / 5 * 100) | number:'1.0-0' }}% VIABLE
+                    </div>
+                    <div class="zone-badge">
+                        <ion-icon name="location"></ion-icon>
+                        <span>{{ location.recommendation.zoneType | uppercase }}</span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="info-section">
+                        <div class="text-info">
+                            <h2>{{ location.recommendation.title }}</h2>
+                            <p>{{ location.type }}</p>
+                        </div>
+                        <div class="icon-circle">
+                            <ion-icon [name]="getCategoryIcon(location.type)"></ion-icon>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <span class="date-label">Actualizado: {{ location.date }}</span>
+                        <ion-button shape="round" color="primary" class="details-btn">Ver detalles</ion-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ng-container>
+
+<!-- DETAIL VIEW -->
+<ng-container *ngIf="selectedLocation">
+    <ion-header class="ion-no-border">
+        <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-button (click)="clearSelection()" style="color: #333;">
+                    <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title style="color: transparent;">Detalle del Negocio</ion-title>
+            <ion-buttons slot="end">
+                <ion-button (click)="confirmDelete()" style="color: #EF4444;">
+                    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content style="--background: #FFFFFF;">
+        <div class="ion-padding details-wrapper">
+            <div class="header-section">
+                <h1 class="main-title">{{ selectedLocation.recommendation.title }}</h1>
+                <p class="subtitle">
+                    <ion-icon name="location" class="location-icon"></ion-icon>
+                    {{ selectedLocation.recommendation.address || 'Ubicación seleccionada' }}
+                </p>
+                <div class="street-view-container"
+                    style="margin-top: 15px; border-radius: 12px; overflow: hidden; height: 180px; background: #e0e0e0; box-shadow: 0 4px 10px rgba(0,0,0,0.08); position: relative;">
+                    <!-- Mapa interactivo mientras tomamos la foto -->
+                    <div *ngIf="!selectedLocation.streetViewImage" id="details-street-view"
+                        style="position: absolute; top: 0; left: 0; z-index: 0; width: 100%; height: calc(100% + 45px);">
+                    </div>
+                    <!-- Capa transparente para bloquear interacciones -->
+                    <div *ngIf="!selectedLocation.streetViewImage"
+                        style="position: absolute; top: 0; left: 0; z-index: 10; width: 100%; height: 100%; background: transparent;">
+                    </div>
+
+                    <!-- Imagen estática obtenida por el script (no usa static api) -->
+                    <img *ngIf="selectedLocation.streetViewImage" [src]="selectedLocation.streetViewImage"
+                        style="position: absolute; top: 0; left: 0; z-index: 0; width: 100%; height: calc(100% + 45px); object-fit: cover;"
+                        alt="Vista estática de street view">
+                </div>
+            </div>
+
+            <div class="analysis-card">
+                <div class="card-title">RESULTADO DE ANÁLISIS</div>
+
+                <div class="viability-header">
+                    <div class="donut-chart"
+                        [style.background]="'conic-gradient(#1877F2 ' + (selectedLocation.recommendation.score / 5 * 100) + '%, #F0F2F5 0)'">
+                        <div class="donut-inner">
+                            <span class="donut-percent">{{ (selectedLocation.recommendation.score / 5 * 100) |
+                                number:'1.0-0' }}%</span>
+                            <span class="donut-label">VIABLE</span>
+                        </div>
+                    </div>
+                    <div class="viability-text">
+                        <h3>Índice de viabilidad excelente</h3>
+                        <p>Este local presenta las condiciones óptimas para el éxito comercial.</p>
+                    </div>
+                </div>
+
+                <div class="metric-row">
+                    <div class="metric-left">
+                        <div class="icon-box green"><ion-icon name="people"></ion-icon></div>
+                        <span>Flujo Peatonal</span>
+                    </div>
+                    <div class="metric-badge badge-green">{{ selectedLocation.recommendation.footTraffic | uppercase }}
+                    </div>
+                </div>
+
+                <div class="metric-row">
+                    <div class="metric-left">
+                        <div class="icon-box blue"><ion-icon name="storefront"></ion-icon></div>
+                        <span>Competencia</span>
+                    </div>
+                    <div class="metric-badge badge-blue">
+                        {{ selectedLocation.recommendation.competitorsCount <= 2 ? 'BAJA' :
+                            (selectedLocation.recommendation.competitorsCount <=4 ? 'MEDIA' : 'ALTA' ) }} </div>
+                    </div>
+
+                    <div class="metric-row">
+                        <div class="metric-left">
+                            <div class="icon-box yellow"><ion-icon name="cash-outline"></ion-icon></div>
+                            <span>Socioeconómico</span>
+                        </div>
+                        <div class="metric-badge badge-yellow">
+                            {{ selectedLocation.recommendation.zoneType === 'Residencial' ? 'MEDIO' : 'ALTO' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title ai-title">
+                    <ion-icon name="sparkles" class="ai-sparkles"></ion-icon>
+                    <h2>Análisis de IA</h2>
+                </div>
+
+                <ul class="ai-bullets">
+                    <li *ngFor="let pro of selectedLocation.recommendation.pros">
+                        <ion-icon name="checkmark-circle"></ion-icon>
+                        <span>{{ pro }}</span>
+                    </li>
+                    <li *ngFor="let con of selectedLocation.recommendation.cons">
+                        <ion-icon name="checkmark-circle"></ion-icon>
+                        <span>{{ con }}</span>
+                    </li>
+                </ul>
+
+                <div class="section-title text-gray">SERVICIOS Y ACCESIBILIDAD</div>
+                <div class="services-pills">
+                    <div class="service-pill blue-pill" *ngIf="selectedLocation.recommendation.accessibility.mainRoads">
+                        <ion-icon name="car"></ion-icon> Main Roads
+                    </div>
+                    <div class="service-pill blue-pill"
+                        *ngIf="selectedLocation.recommendation.accessibility.publicTransport">
+                        <ion-icon name="bus"></ion-icon> Public Transp.
+                    </div>
+                    <div class="service-pill green-pill">
+                        <ion-icon name="walk"></ion-icon> Walkability: {{
+                        selectedLocation.recommendation.accessibility.walkability }}
+                    </div>
+                </div>
+
+                <div class="section-title text-gray">UBICACIÓN</div>
+                <div class="location-map">
+                    <img [src]="getMapStaticUrl(selectedLocation.recommendation.coords.lat, selectedLocation.recommendation.coords.lng)"
+                        alt="Mapa">
+
+
+                </div>
+            </div>
+    </ion-content>
+</ng-container>

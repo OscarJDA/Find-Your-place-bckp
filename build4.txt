@@ -1,0 +1,93 @@
+Node.js version v25.2.1 detected.
+Odd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.
+- Generating browser application bundles (phase: setup)...
+Γ£ö Browser application bundle generation complete.
+Γ£ö Browser application bundle generation complete.
+- Copying assets...
+Γ£ö Copying assets complete.
+- Generating index html...
+Γ£ö Index html generation complete.
+
+[1mInitial chunk files[22m          [2m | [22m[1mNames[22m                                                 [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mmain.d8bb17af56b39110.js[39m     [2m | [22m[2mmain[22m                                                  [2m | [22m[36m601.94 kB[39m[2m | [22m              [36m159.05 kB[39m
+[32mstyles.3e2a985961f84ef7.css[39m  [2m | [22m[2mstyles[22m                                                [2m | [22m [36m44.25 kB[39m[2m | [22m                [36m5.39 kB[39m
+[32mpolyfills.c1d7d33ea838c63e.js[39m[2m | [22m[2mpolyfills[22m                                             [2m | [22m [36m34.92 kB[39m[2m | [22m               [36m11.38 kB[39m
+[32mruntime.c757fb35b6725a40.js[39m  [2m | [22m[2mruntime[22m                                               [2m | [22m  [36m4.95 kB[39m[2m | [22m                [36m2.36 kB[39m
+
+[1m [22m                            [2m | [22m[1mInitial total[22m                                         [2m | [22m[1m686.07 kB[22m[2m | [22m              [1m178.18 kB[22m
+
+[1mLazy chunk files[22m             [2m | [22m[1mNames[22m                                                 [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32m5331.684b516865d180da.js[39m     [2m | [22m[2mmap-map-module[22m                                        [2m | [22m  [36m1.73 MB[39m[2m | [22m              [36m384.73 kB[39m
+[32m3325.d302694420b2ea23.js[39m     [2m | [22m[2manalisis-analisis-page[22m                                [2m | [22m[36m627.80 kB[39m[2m | [22m              [36m154.34 kB[39m
+[32m3842.21f382eb9ceb16f9.js[39m     [2m | [22m[2mcanvg[22m                                                 [2m | [22m[36m156.83 kB[39m[2m | [22m               [36m44.79 kB[39m
+[32m2885.677885805a009552.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m74.70 kB[39m[2m | [22m               [36m14.28 kB[39m
+[32m3506.d3fce376833142f3.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m55.94 kB[39m[2m | [22m                [36m7.44 kB[39m
+[32m2348.ed04bedb239d06ec.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m47.91 kB[39m[2m | [22m                [36m5.98 kB[39m
+[32m7076.f8656b2e5ee78416.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m43.81 kB[39m[2m | [22m                [36m7.60 kB[39m
+[32m7720.ac2da2142ce9486a.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m42.51 kB[39m[2m | [22m                [36m9.54 kB[39m
+[32m9344.0065d0da611d0a3c.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m41.82 kB[39m[2m | [22m                [36m5.91 kB[39m
+[32m441.b11f188dc74a20b8.js[39m      [2m | [22m[2m-[22m                                                     [2m | [22m [36m37.97 kB[39m[2m | [22m                [36m9.04 kB[39m
+[32m5222.55228183e9d1a95d.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m35.96 kB[39m[2m | [22m                [36m6.55 kB[39m
+[32m2560.2f17a7f57fc8dd9d.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m29.98 kB[39m[2m | [22m                [36m5.75 kB[39m
+[32m8477.656cbf2de8cf3d0a.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m29.61 kB[39m[2m | [22m                [36m5.84 kB[39m
+[32m2257.e140e84752c1abe3.js[39m     [2m | [22m[2mmap-map-module[22m                                        [2m | [22m [36m28.85 kB[39m[2m | [22m                [36m9.22 kB[39m
+[32m4591.11e3ffb8568aaf2c.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m28.56 kB[39m[2m | [22m                [36m5.77 kB[39m
+[32m8814.713e7839ce9f74a8.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m25.30 kB[39m[2m | [22m                [36m5.06 kB[39m
+[32m5197.611851e090f3303b.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m24.99 kB[39m[2m | [22m                [36m5.28 kB[39m
+[32m6433.86cd1b4e0a56d585.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m24.64 kB[39m[2m | [22m                [36m6.18 kB[39m
+[32m2075.7746bb779a8d11de.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m24.39 kB[39m[2m | [22m                [36m5.36 kB[39m
+[32m8193.60e11c62fa0586b2.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m24.20 kB[39m[2m | [22m                [36m4.40 kB[39m
+[32m3814.e58e262efc918a14.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m23.69 kB[39m[2m | [22m                [36m4.11 kB[39m
+[32m5075.2930f56dd9a112a6.js[39m     [2m | [22m[2mhome-home-module[22m                                      [2m | [22m [36m22.83 kB[39m[2m | [22m                [36m5.89 kB[39m
+[32m7676.ab043b4c8eeaa297.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m22.50 kB[39m[2m | [22m                [36m4.38 kB[39m
+[32m627.b6e1303bae35c731.js[39m      [2m | [22m[2mdompurify[22m                                             [2m | [22m [36m22.48 kB[39m[2m | [22m                [36m7.70 kB[39m
+[32m4463.12a357c5ef97a555.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m22.11 kB[39m[2m | [22m                [36m3.83 kB[39m
+[32m5949.9a30874fa72caa6f.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m20.77 kB[39m[2m | [22m                [36m4.18 kB[39m
+[32m2415.cf5393d31f27ca70.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m19.95 kB[39m[2m | [22m                [36m5.06 kB[39m
+[32m8066.5c96511dcd408682.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m19.58 kB[39m[2m | [22m                [36m3.82 kB[39m
+[32m9977.a18874b70b2a3b1f.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m19.54 kB[39m[2m | [22m                [36m1.96 kB[39m
+[32mcommon.e089822f78535241.js[39m   [2m | [22m[2mcommon[22m                                                [2m | [22m [36m19.44 kB[39m[2m | [22m                [36m5.66 kB[39m
+[32m4406.c612442ac157291f.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m18.98 kB[39m[2m | [22m                [36m3.37 kB[39m
+[32m3511.84e59bd16578f210.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m17.74 kB[39m[2m | [22m                [36m3.19 kB[39m
+[32m8314.000a4f176ce0b19f.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m14.74 kB[39m[2m | [22m                [36m3.08 kB[39m
+[32m944.f20916cb73927068.js[39m      [2m | [22m[2m-[22m                                                     [2m | [22m [36m13.64 kB[39m[2m | [22m                [36m4.48 kB[39m
+[32m2375.c137f4157a73c8d0.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m12.22 kB[39m[2m | [22m                [36m3.14 kB[39m
+[32m3162.6a42cc8bb2aa9c4c.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m12.22 kB[39m[2m | [22m                [36m2.48 kB[39m
+[32m5712.5a53dbfc6fa5c9d4.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m12.05 kB[39m[2m | [22m                [36m3.85 kB[39m
+[32m8970.d4ac5ba2af8f8d42.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m11.71 kB[39m[2m | [22m                [36m4.02 kB[39m
+[32m8584.aca25bf561b77f2e.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m11.67 kB[39m[2m | [22m                [36m2.38 kB[39m
+[32m4699.602f10e5a44fd02e.js[39m     [2m | [22m[2mios-transition-js[22m                                     [2m | [22m [36m10.56 kB[39m[2m | [22m                [36m2.71 kB[39m
+[32m6840.d8076c01e66f0d8a.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m [36m10.23 kB[39m[2m | [22m                [36m2.31 kB[39m
+[32m1258.c0cc3b5eb483c948.js[39m     [2m | [22m[2mhome-financial-simulator-financial-simulator-component[22m[2m | [22m [36m10.14 kB[39m[2m | [22m                [36m2.69 kB[39m
+[32m7372.162c166fa44443cb.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m9.93 kB[39m[2m | [22m                [36m2.66 kB[39m
+[32m1459.0bd103032ec97405.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m9.66 kB[39m[2m | [22m                [36m3.12 kB[39m
+[32m2937.5bb1fe46372871f1.js[39m     [2m | [22m[2mweb[22m                                                   [2m | [22m  [36m9.44 kB[39m[2m | [22m                [36m2.78 kB[39m
+[32m5100.766000e166d2afb6.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m8.64 kB[39m[2m | [22m                [36m1.46 kB[39m
+[32m6024.934a11ca22915ce5.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m7.22 kB[39m[2m | [22m                [36m1.33 kB[39m
+[32m7428.79df45e6bc6e32d7.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m7.09 kB[39m[2m | [22m                [36m2.15 kB[39m
+[32m8592.66b5223c33454f74.js[39m     [2m | [22m[2mnegocios-negocios-page[22m                                [2m | [22m  [36m6.66 kB[39m[2m | [22m                [36m2.15 kB[39m
+[32m8805.d39c0cd3a04dd87d.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m6.36 kB[39m[2m | [22m                [36m1.58 kB[39m
+[32m4171.78a8ea604c768618.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m6.19 kB[39m[2m | [22m                [36m1.56 kB[39m
+[32m7030.a15b07d9b0274459.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m6.06 kB[39m[2m | [22m                [36m2.09 kB[39m
+[32m770.fa61e8e9387d3d59.js[39m      [2m | [22m[2m-[22m                                                     [2m | [22m  [36m5.77 kB[39m[2m | [22m                [36m1.75 kB[39m
+[32m4630.247ce47bbb14a37c.js[39m     [2m | [22m[2mios-transition-js[22m                                     [2m | [22m  [36m5.34 kB[39m[2m | [22m                [36m2.10 kB[39m
+[32m9816.52ef919b98243e23.js[39m     [2m | [22m[2minput-shims-DyOpfTg6-js[22m                               [2m | [22m  [36m5.23 kB[39m[2m | [22m                [36m1.99 kB[39m
+[32m2422.f8f1b0739605efd4.js[39m     [2m | [22m[2mtabs-tabs-routes[22m                                      [2m | [22m  [36m4.66 kB[39m[2m | [22m                [36m1.45 kB[39m
+[32m1102.dae406b05460ff6f.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m4.43 kB[39m[2m | [22m                [36m1.60 kB[39m
+[32m1049.e5eb24adbf71ace4.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m4.22 kB[39m[2m | [22m                [36m1.16 kB[39m
+[32m5887.a391884ca7d0c745.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m3.36 kB[39m[2m | [22m                [36m1.13 kB[39m
+[32m964.24ea62c837750870.js[39m      [2m | [22m[2m-[22m                                                     [2m | [22m  [36m3.17 kB[39m[2m | [22m              [36m968 bytes[39m
+[32m9013.181296f0b3e1a662.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m2.96 kB[39m[2m | [22m                [36m1.07 kB[39m
+[32m323.b5e5b1c9ec70ca1e.js[39m      [2m | [22m[2m-[22m                                                     [2m | [22m  [36m2.60 kB[39m[2m | [22m              [36m881 bytes[39m
+[32m2702.7b82c2c7b5d1933e.js[39m     [2m | [22m[2msplash-splash-module[22m                                  [2m | [22m  [36m2.53 kB[39m[2m | [22m              [36m945 bytes[39m
+[32m6521.568d91b7daa0bd6d.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m2.23 kB[39m[2m | [22m                [36m1.07 kB[39m
+[32m4183.8d32904c67ed070a.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m1.77 kB[39m[2m | [22m              [36m738 bytes[39m
+[32m7927.0b4f4beb2bf9d78d.js[39m     [2m | [22m[2mindex-ceb5RaMT-js[22m                                     [2m | [22m  [36m1.66 kB[39m[2m | [22m              [36m766 bytes[39m
+[32m7240.b6a47df1e8bcf1bf.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m1.42 kB[39m[2m | [22m              [36m499 bytes[39m
+[32m1577.cb0883e27bf3537d.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m  [36m1.11 kB[39m[2m | [22m              [36m622 bytes[39m
+[32m7179.286d63b933abb2db.js[39m     [2m | [22m[2mmd-transition-js[22m                                      [2m | [22m  [36m1.07 kB[39m[2m | [22m              [36m488 bytes[39m
+[32m9073.ddd38f3b864a7986.js[39m     [2m | [22m[2m-[22m                                                     [2m | [22m[36m592 bytes[39m[2m | [22m              [36m352 bytes[39m
+[32m9364.b815e149810ef30f.js[39m     [2m | [22m[2mstatus-tap-5DQ7Fc4V-js[22m                                [2m | [22m[36m529 bytes[39m[2m | [22m              [36m327 bytes[39m
+[32m1227.16ca681a6488cfc8.js[39m     [2m | [22m[2mweb[22m                                                   [2m | [22m[36m506 bytes[39m[2m | [22m              [36m271 bytes[39m
+
+Build at: 2026-03-04T16:38:51.428Z - Hash: a3259e627bf5dd0f - Time: 10552ms
